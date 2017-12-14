@@ -1,2 +1,6 @@
 #!/bin/bash
-cp -v *.sh /usr/local/bin/
+for f in *.sh 
+  do
+    cp -v $f /usr/local/bin/
+    chmod +x /usr/local/bin/$f
+  done
