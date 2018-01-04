@@ -9,7 +9,7 @@ exit 1
 fi
 
 OVPN=`ls *.ovpn`
-
+mate-terminal &
 mate-terminal --tab --title="Open VPN" --working-directory=$PWD --command=openvpn\ $OVPN
 mate-terminal --tab --title="Metasploit" --working-directory=$PWD --command=msfconsole
 mate-terminal --tab --working-directory=$PWD 
