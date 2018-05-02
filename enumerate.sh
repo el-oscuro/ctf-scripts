@@ -1,13 +1,15 @@
 #!/bin/bash
 if [ "$1" == "" ]; then
-  echo Usage: $0 IP
+  echo Usage: $0 http://url
   exit 1
 fi
-nmap $1
-nmap -sS -v -A $1 | tee $1-nmap.txt
-uniscan -u http://$1 -qweds
-cp -v /usr/share/uniscan/report/$1.html uniscan-$1.html
-nikto -host http://$1 -output $1-nikto.txt
-dirb http://$1/ -o $1-dirb.txt 
+IP=`echo $1 | cut -f3 -d'/' | cut -f1 -d":"`
+echo Host: $IP
+nmap $IP
+nmap -sS -v -A $IP | tee $IP-nmap.txt
+uniscan -u $1 -qweds
+cp -v /usr/share/uniscan/report/$IP.html uniscan-$IP.html
+nikto -host $1 -output $IP-nikto.txt
+dirb $1 -o $IP-dirb.txt 
 
 
