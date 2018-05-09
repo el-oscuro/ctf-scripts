@@ -1,0 +1,25 @@
+#!/bin/bash
+TMPFILE1=`mktemp`
+TMPFILE2=`mktemp`
+TMPFILE3=`mktemp`
+# Lowercase only
+cat $1 | tr [:upper:] [:lower:] > $TMPFILE1
+cp $TMPFILE1 $TMPFILE2
+# Uppercase first letter
+sed 's/^./\u&/' $TMPFILE1 >> $TMPFILE2
+# ALL CAPS
+cat $1 | tr [:lower:] [:upper:] >> $TMPFILE2
+# Finally, the original
+cat $1 >> $TMPFILE2
+#cleanout dups
+sort -u $TMPFILE2 > $TMPFILE3
+rm $TMPFILE1 $TMPFILE2 
+# Finally dump it to stdout.  We don't want to write it to disk as it will be huge.  Use --pipe/--stdin for john
+echo Initial wordlist - upper/lower/initcap 1>&2
+
+cat $TMPFILE3 
+YEARS=`for (( i=1900; i<2030; i++)); do echo $i; done`
+
+echo Processing numbers 00-99... 1>&2
+for i in $(cat $TMPFILE3) ; do seq -f "$i%0.0f" 0 99; done 
+
