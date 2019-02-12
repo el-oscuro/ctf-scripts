@@ -22,5 +22,8 @@ if [ "$SCRIPT" == "ctfenv.sh" ]; then
     echo) 1>&2
    exit 1  # not sourced
 fi
-LHOST=`ifconfig tun0 | grep "inet " | cut -c14\- | cut -f1 -d" "`
+if [ "$LHOST" == "" ]; then
+  IFACE=`ifconfig | grep UP | cut -f1 -d":" | grep -v lo | grep -v eth0`
+  LHOST=`ifconfig $IFACE | grep "inet " | cut -c14\- | cut -f1 -d" "`
+fi
 echo LHOST: $LHOST
