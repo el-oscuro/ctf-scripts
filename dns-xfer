@@ -1,0 +1,7 @@
+#!/bin/bash
+# simple bash script to do dns transfers like basic dnsenum usage
+if [ "$1" == "" ]; then
+  echo Usage: $0 domain
+  exit 1
+fi
+host -t ns $1 | cut -f4 -d" " | while read x; do host -l $1 $x; done
