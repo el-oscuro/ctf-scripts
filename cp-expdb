@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ "$1" == "" ]; then
+  echo Usage: $0 exploit-db filename
+  echo copies a file from exploit-db to current dir
+  echo $0 22333.c
+fi
+FILE=`locate $1 | head 1`
+cp -v $FILE .
