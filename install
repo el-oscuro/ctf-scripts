@@ -1,5 +1,5 @@
 #!/bin/bash
-for f in *.sh 
+for f in `ls | grep -v install | grep -v README`
   do
     cp -v $f /usr/local/bin/
     chmod +x /usr/local/bin/$f

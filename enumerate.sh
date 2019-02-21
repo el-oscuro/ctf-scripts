@@ -1,15 +1,18 @@
 #!/bin/bash
 if [ "$1" == "" ]; then
-  echo Usage: $0 http://url
+  echo Usage: $0 ip [service]
   exit 1
 fi
-IP=`echo $1 | cut -f3 -d'/' | cut -f1 -d":"`
+IP=$1
 echo Host: $IP
-nmap $IP
-nmap -sS -v -A $IP | tee $IP-nmap.txt
-uniscan -u $1 -qweds
-cp -v /usr/share/uniscan/report/$IP.html uniscan-$IP.html
-nikto -host $1 -output $IP-nikto.txt
-dirb $1 -o $IP-dirb.txt 
+nmap -sV $IP
+if [ "$2" != "" ]; then
+  nmap_scripts=`locate *nse* | grep $2`
+  for s in $nmap_scripts
+  do
+    echo nmap --script=$s $IP
+  done
+fi
 
+  
 
