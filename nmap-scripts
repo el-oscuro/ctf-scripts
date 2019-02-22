@@ -4,4 +4,7 @@ if [ "$1" == "" ]; then
   echo ex: $0 smb
   exit 1
 fi
-ls /usr/share/nmap/scripts/*$1*.nse
+ls /usr/share/nmap/scripts/*$1*.nse | while read x
+do
+basename $x
+done
