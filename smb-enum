@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ "$1" == "" ]; then
+  echo Usage: $0 host_spec
+  echo host_spec is nmap list of hosts i.e \"192.168.1.0/24\" or \"-iL hosts.txt\"
+  exit 1
+fi
+
+nmap $* -p 139,445 sV -O --open > smb-host-details.txt
+if [ "$?" != "0" ]; then
+  echo $0:  nmap failed
+  exit 1
+fi
+
+grep "Nmap scan report for" smb-host-details.txt  | cut -f5 -d" " > smb.txt
+echo --------------------------------------------------------------
+echo SMB scan details are in:	smb-host-details.txt
+echo IP list is in:		smb.txt
+echo --------------------------------------------------------------
+
