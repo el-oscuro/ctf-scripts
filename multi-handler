@@ -1,0 +1,10 @@
+#!/bin/bash
+. ctfenv.sh
+TMPFILE=`mktemp`
+cat <<-EOF > $TMPFILE
+use exploit/multi/handler
+set LHOST $LHOST
+set LPORT $1
+EOF
+
+msfconsole :q
