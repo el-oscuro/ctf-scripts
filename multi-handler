@@ -1,10 +1,17 @@
 #!/bin/bash
+if [ "$1" == "" ]; then
+  echo Usage: $0 listening port
+  exit 1
+fi
 . ctfenv.sh
-TMPFILE=`mktemp`
-cat <<-EOF > $TMPFILE
-use exploit/multi/handler
-set LHOST $LHOST
-set LPORT $1
-EOF
+echo Starting exploit handler on metasploit...
+echo
+echo use exploit/multi/handler
+echo set LPORT $1
+echo set LHOST $LHOST
+echo
 
-msfconsole :q
+
+cmds="use exploit/multi/handler;set LHOST $LHOST;set LPORT $1"
+
+msfconsole -x "$cmds"
