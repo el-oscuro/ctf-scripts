@@ -1,0 +1,25 @@
+#!/bin/bash
+if [ "$2" == "" ]; then
+  echo Usage: $0 port host_spec
+  echo port is the nmap list of ports, i,e:  22 80,8080 etc
+  echo host_spec is nmap list of hosts i.e \"192.168.1.0/24\" or \"-iL hosts.txt\"
+  exit 1
+fi
+PORTS=$1
+shift
+SERVICE_NAME=`nmap -p $PORTS localhost | grep /tcp | head -n1 | cut -f3 -d" "`
+echo Enumerating service:  $SERVICE_NAME
+DETAILS=$SERVICE_NAME-host-details.txt
+HOSTS=$SERVICE_NAME.txt
+nmap -p $PORTS $* -sV -O --open > $DETAILS
+if [ "$?" != "0" ]; then
+  echo $0:  nmap failed
+  exit 1
+fi
+
+grep "Nmap scan report for" $DETAILS  | cut -f5 -d" " > $HOSTS
+echo --------------------------------------------------------------
+echo $SERVICE_NAME scan details are in:	$DETAILS
+echo IP list is in:		$HOSTS
+echo --------------------------------------------------------------
+
