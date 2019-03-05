@@ -1,0 +1,31 @@
+#!/bin/bash
+function usage
+{
+  echo Usage: $0 lport payload search terms
+  echo Searchs msfvenom for matching payloads
+}
+function search
+{
+for s in $* 
+do
+  echo \| grep $s
+done
+}
+if [ "$2" == "" ]; then
+  usage
+  exit 1
+fi
+source ctfenv.sh
+export LPORT=$1
+shift
+echo LPORT=$LPORT
+SEARCH=`search $*`
+PAYLOADS=/tmp/msfvenom-payloads.txt
+if [ ! -f $PAYLOADS ]; then
+  echo $0:  Generating payload list...
+  msfvenom --list=payloads > $PAYLOADS
+fi
+TMPFILE=`mktemp`
+echo cat $PAYLOADS $SEARCH > $TMPFILE
+chmod +x $TMPFILE
+$TMPFILE
